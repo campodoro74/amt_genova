@@ -1,0 +1,54 @@
+# Helper input_booleans for schedule gating (optional)
+# Add to your configuration.yaml as:
+# input_boolean: !include tado_helpers.yaml
+
+bagno_schedule_enabled:
+  name: Bagno schedule enabled
+  initial: true
+
+camera_liam_schedule_enabled:
+  name: Camera Liam schedule enabled
+  initial: true
+
+stanza_liam_schedule_enabled:
+  name: Stanza Liam schedule enabled
+  initial: true
+
+ingresso_schedule_enabled:
+  name: Ingresso schedule enabled
+  initial: true
+
+kitchen_schedule_enabled:
+  name: Kitchen schedule enabled
+  initial: true
+
+sala_schedule_enabled:
+  name: Sala schedule enabled
+  initial: true
+# Helper input_booleans for schedule gating (optional)
+# Add to your configuration.yaml as:
+# input_boolean: !include tado_helpers.yaml
+
+bagno_schedule_enabled:
+  name: Bagno schedule enabled
+  initial: true
+
+camera_liam_schedule_enabled:
+  name: Camera Liam schedule enabled
+  initial: true
+
+stanza_liam_schedule_enabled:
+  name: Stanza Liam schedule enabled
+  initial: true
+
+ingresso_schedule_enabled:
+  name: Ingresso schedule enabled
+  initial: true
+
+kitchen_schedule_enabled:
+  name: Kitchen schedule enabled
+  initial: true
+
+sala_schedule_enabled:
+  name: Sala schedule enabled
+  initial: true

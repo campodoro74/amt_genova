@@ -1,0 +1,28 @@
+# Binary Sensor Template - Weekend Detection
+# Add this to your configuration.yaml under template:
+#   - binary_sensor:
+#       - name: "Is Weekend"
+#         unique_id: "is_weekend"
+#         device_class: presence
+#         state: "{{ now().weekday() >= 5 }}"
+
+# Or if you prefer to include directly in automations.yaml
+# Reference as: {{ now().weekday() >= 5 }} in your choose conditions
+
+# This template detects Saturday (5) and Sunday (6)
+# Python weekday(): Monday=0, Tuesday=1, Wednesday=2, Thursday=3, Friday=4, Saturday=5, Sunday=6
+
+# ============================================================
+# TEMPLATE CONFIGURATION FOR configuration.yaml
+# ============================================================
+
+# Add this section to your configuration.yaml:
+
+template:
+  - binary_sensor:
+      - name: "Is Weekend"
+        unique_id: "is_weekend"
+        device_class: "presence"
+        state: "{{ now().weekday() >= 5 }}"
+        availability: "{{ now() is defined }}"
+        icon: "{% if now().weekday() >= 5 %}mdi:beach{% else %}mdi:briefcase{% endif %}"
