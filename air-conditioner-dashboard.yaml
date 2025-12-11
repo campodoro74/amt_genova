@@ -2,15 +2,16 @@
 # Dashboard for managing 3 Midea/M-Smart air conditioning units
 # 
 # Device Information:
-# 1. net_ac_B64E - IP: 192.168.68.37
-# 2. net_ac_C400 - IP: 192.168.68.19
-# 3. net_ac_2332 - IP: 192.168.68.165
+# 1. AC Bedroom - Entry ID: 01KC6PK6RDZ7E3GW17F0CS7N1Z
+# 2. AC Liam - Entry ID: 01KC6PKXZENJJG8D7CPKF1H8B1
+# 3. AC Living Room - Entry ID: 01KC6PJ0C34408GW7MDY65T0VX
 #
-# Note: Update entity IDs below once the devices are integrated in Home Assistant
-# Expected entity IDs (adjust if different):
-# - climate.net_ac_b64e (or climate.net_ac_B64E)
-# - climate.net_ac_c400 (or climate.net_ac_C400)
-# - climate.net_ac_2332 (or climate.net_ac_2332)
+# Note: Update entity IDs below with the actual entity IDs from Home Assistant
+# To find entity IDs: Settings → Devices & Services → Midea AC LAN → Check device entities
+# Entity IDs (updated after integration v0.6.1):
+# - climate.153931628549890_climate (AC Bedroom)
+# - climate.153931628549884_climate (AC Liam)
+# - climate.152832116922715_climate (AC Living Room)
 
 views:
   - title: Air Conditioners
@@ -24,23 +25,23 @@ views:
           Manage all 3 air conditioning units from this dashboard.
           
           **Units:**
-          - **B64E** (192.168.68.37)
-          - **C400** (192.168.68.19)
-          - **2332** (192.168.68.165)
+          - **Bedroom** (Entry ID: 01KC6PK6RDZ7E3GW17F0CS7N1Z)
+          - **Liam** (Entry ID: 01KC6PKXZENJJG8D7CPKF1H8B1)
+          - **Living Room** (Entry ID: 01KC6PJ0C34408GW7MDY65T0VX)
 
       # Summary Card - Quick Status Overview
       - type: entities
         title: Quick Status
         show_header_toggle: false
         entities:
-          - entity: climate.net_ac_b64e
-            name: AC B64E
+          - entity: climate.153931628549890_climate
+            name: AC Bedroom
             icon: mdi:air-conditioner
-          - entity: climate.net_ac_c400
-            name: AC C400
+          - entity: climate.153931628549884_climate
+            name: AC Liam
             icon: mdi:air-conditioner
-          - entity: climate.net_ac_2332
-            name: AC 2332
+          - entity: climate.152832116922715_climate
+            name: AC Living Room
             icon: mdi:air-conditioner
 
       # Grid layout for 3 AC units
@@ -48,37 +49,37 @@ views:
         columns: 3
         square: false
         cards:
-          # ===== AC Unit 1: B64E =====
+          # ===== AC Unit 1: Bedroom =====
           - type: vertical-stack
             cards:
               - type: markdown
                 content: |
-                  ### AC B64E
-                  IP: 192.168.68.37
+                  ### AC Bedroom
+                  Entry ID: 01KC6PK6RDZ7E3GW17F0CS7N1Z
               
               - type: thermostat
-                entity: climate.net_ac_b64e
-                name: AC B64E
+                entity: climate.153931628549890_climate
+                name: AC Bedroom
               
               - type: entities
                 title: Status
                 show_header_toggle: false
                 entities:
-                  - entity: climate.net_ac_b64e
+                  - entity: climate.153931628549890_climate
                     name: Current Status
                     attribute: hvac_action
-                  - entity: climate.net_ac_b64e
+                  - entity: climate.153931628549890_climate
                     name: Current Temperature
                     attribute: current_temperature
                     unit: "°C"
-                  - entity: climate.net_ac_b64e
+                  - entity: climate.153931628549890_climate
                     name: Target Temperature
                     attribute: temperature
                     unit: "°C"
-                  - entity: climate.net_ac_b64e
+                  - entity: climate.153931628549890_climate
                     name: Mode
                     attribute: hvac_mode
-                  - entity: climate.net_ac_b64e
+                  - entity: climate.153931628549890_climate
                     name: Fan Speed
                     attribute: fan_mode
               
@@ -91,7 +92,7 @@ views:
                       action: call-service
                       service: climate.turn_off
                       service_data:
-                        entity_id: climate.net_ac_b64e
+                        entity_id: climate.153931628549890_climate
                   - type: button
                     name: Cool
                     icon: mdi:snowflake
@@ -99,7 +100,7 @@ views:
                       action: call-service
                       service: climate.set_hvac_mode
                       service_data:
-                        entity_id: climate.net_ac_b64e
+                        entity_id: climate.153931628549890_climate
                         hvac_mode: cool
                   - type: button
                     name: Heat
@@ -108,7 +109,7 @@ views:
                       action: call-service
                       service: climate.set_hvac_mode
                       service_data:
-                        entity_id: climate.net_ac_b64e
+                        entity_id: climate.153931628549890_climate
                         hvac_mode: heat
                   - type: button
                     name: Auto
@@ -117,7 +118,7 @@ views:
                       action: call-service
                       service: climate.set_hvac_mode
                       service_data:
-                        entity_id: climate.net_ac_b64e
+                        entity_id: climate.153931628549890_climate
                         hvac_mode: auto
               
               - type: horizontal-stack
@@ -128,7 +129,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_b64e
+                        entity_id: climate.153931628549890_climate
                         temperature: 18
                   - type: button
                     name: 20°C
@@ -136,7 +137,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_b64e
+                        entity_id: climate.153931628549890_climate
                         temperature: 20
                   - type: button
                     name: 22°C
@@ -144,7 +145,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_b64e
+                        entity_id: climate.153931628549890_climate
                         temperature: 22
                   - type: button
                     name: 24°C
@@ -152,7 +153,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_b64e
+                        entity_id: climate.153931628549890_climate
                         temperature: 24
                   - type: button
                     name: 26°C
@@ -160,40 +161,40 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_b64e
+                        entity_id: climate.153931628549890_climate
                         temperature: 26
 
-          # ===== AC Unit 2: C400 =====
+          # ===== AC Unit 2: Liam =====
           - type: vertical-stack
             cards:
               - type: markdown
                 content: |
-                  ### AC C400
-                  IP: 192.168.68.19
+                  ### AC Liam
+                  Entry ID: 01KC6PKXZENJJG8D7CPKF1H8B1
               
               - type: thermostat
-                entity: climate.net_ac_c400
-                name: AC C400
+                entity: climate.153931628549884_climate
+                name: AC Liam
               
               - type: entities
                 title: Status
                 show_header_toggle: false
                 entities:
-                  - entity: climate.net_ac_c400
+                  - entity: climate.153931628549884_climate
                     name: Current Status
                     attribute: hvac_action
-                  - entity: climate.net_ac_c400
+                  - entity: climate.153931628549884_climate
                     name: Current Temperature
                     attribute: current_temperature
                     unit: "°C"
-                  - entity: climate.net_ac_c400
+                  - entity: climate.153931628549884_climate
                     name: Target Temperature
                     attribute: temperature
                     unit: "°C"
-                  - entity: climate.net_ac_c400
+                  - entity: climate.153931628549884_climate
                     name: Mode
                     attribute: hvac_mode
-                  - entity: climate.net_ac_c400
+                  - entity: climate.153931628549884_climate
                     name: Fan Speed
                     attribute: fan_mode
               
@@ -206,7 +207,7 @@ views:
                       action: call-service
                       service: climate.turn_off
                       service_data:
-                        entity_id: climate.net_ac_c400
+                        entity_id: climate.153931628549884_climate
                   - type: button
                     name: Cool
                     icon: mdi:snowflake
@@ -214,7 +215,7 @@ views:
                       action: call-service
                       service: climate.set_hvac_mode
                       service_data:
-                        entity_id: climate.net_ac_c400
+                        entity_id: climate.153931628549884_climate
                         hvac_mode: cool
                   - type: button
                     name: Heat
@@ -223,7 +224,7 @@ views:
                       action: call-service
                       service: climate.set_hvac_mode
                       service_data:
-                        entity_id: climate.net_ac_c400
+                        entity_id: climate.153931628549884_climate
                         hvac_mode: heat
                   - type: button
                     name: Auto
@@ -232,7 +233,7 @@ views:
                       action: call-service
                       service: climate.set_hvac_mode
                       service_data:
-                        entity_id: climate.net_ac_c400
+                        entity_id: climate.153931628549884_climate
                         hvac_mode: auto
               
               - type: horizontal-stack
@@ -243,7 +244,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_c400
+                        entity_id: climate.153931628549884_climate
                         temperature: 18
                   - type: button
                     name: 20°C
@@ -251,7 +252,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_c400
+                        entity_id: climate.153931628549884_climate
                         temperature: 20
                   - type: button
                     name: 22°C
@@ -259,7 +260,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_c400
+                        entity_id: climate.153931628549884_climate
                         temperature: 22
                   - type: button
                     name: 24°C
@@ -267,7 +268,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_c400
+                        entity_id: climate.153931628549884_climate
                         temperature: 24
                   - type: button
                     name: 26°C
@@ -275,40 +276,40 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_c400
+                        entity_id: climate.153931628549884_climate
                         temperature: 26
 
-          # ===== AC Unit 3: 2332 =====
+          # ===== AC Unit 3: Living Room =====
           - type: vertical-stack
             cards:
               - type: markdown
                 content: |
-                  ### AC 2332
-                  IP: 192.168.68.165
+                  ### AC Living Room
+                  Entry ID: 01KC6PJ0C34408GW7MDY65T0VX
               
               - type: thermostat
-                entity: climate.net_ac_2332
-                name: AC 2332
+                entity: climate.152832116922715_climate
+                name: AC Living Room
               
               - type: entities
                 title: Status
                 show_header_toggle: false
                 entities:
-                  - entity: climate.net_ac_2332
+                  - entity: climate.152832116922715_climate
                     name: Current Status
                     attribute: hvac_action
-                  - entity: climate.net_ac_2332
+                  - entity: climate.152832116922715_climate
                     name: Current Temperature
                     attribute: current_temperature
                     unit: "°C"
-                  - entity: climate.net_ac_2332
+                  - entity: climate.152832116922715_climate
                     name: Target Temperature
                     attribute: temperature
                     unit: "°C"
-                  - entity: climate.net_ac_2332
+                  - entity: climate.152832116922715_climate
                     name: Mode
                     attribute: hvac_mode
-                  - entity: climate.net_ac_2332
+                  - entity: climate.152832116922715_climate
                     name: Fan Speed
                     attribute: fan_mode
               
@@ -321,7 +322,7 @@ views:
                       action: call-service
                       service: climate.turn_off
                       service_data:
-                        entity_id: climate.net_ac_2332
+                        entity_id: climate.152832116922715_climate
                   - type: button
                     name: Cool
                     icon: mdi:snowflake
@@ -329,7 +330,7 @@ views:
                       action: call-service
                       service: climate.set_hvac_mode
                       service_data:
-                        entity_id: climate.net_ac_2332
+                        entity_id: climate.152832116922715_climate
                         hvac_mode: cool
                   - type: button
                     name: Heat
@@ -338,7 +339,7 @@ views:
                       action: call-service
                       service: climate.set_hvac_mode
                       service_data:
-                        entity_id: climate.net_ac_2332
+                        entity_id: climate.152832116922715_climate
                         hvac_mode: heat
                   - type: button
                     name: Auto
@@ -347,7 +348,7 @@ views:
                       action: call-service
                       service: climate.set_hvac_mode
                       service_data:
-                        entity_id: climate.net_ac_2332
+                        entity_id: climate.152832116922715_climate
                         hvac_mode: auto
               
               - type: horizontal-stack
@@ -358,7 +359,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_2332
+                        entity_id: climate.152832116922715_climate
                         temperature: 18
                   - type: button
                     name: 20°C
@@ -366,7 +367,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_2332
+                        entity_id: climate.152832116922715_climate
                         temperature: 20
                   - type: button
                     name: 22°C
@@ -374,7 +375,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_2332
+                        entity_id: climate.152832116922715_climate
                         temperature: 22
                   - type: button
                     name: 24°C
@@ -382,7 +383,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_2332
+                        entity_id: climate.152832116922715_climate
                         temperature: 24
                   - type: button
                     name: 26°C
@@ -390,7 +391,7 @@ views:
                       action: call-service
                       service: climate.set_temperature
                       service_data:
-                        entity_id: climate.net_ac_2332
+                        entity_id: climate.152832116922715_climate
                         temperature: 26
 
       # Master Controls - Control all units at once
@@ -418,9 +419,9 @@ views:
                       service: climate.turn_off
                       target:
                         entity_id:
-                          - climate.net_ac_b64e
-                          - climate.net_ac_c400
-                          - climate.net_ac_2332
+                          - climate.153931628549890_climate
+                          - climate.153931628549884_climate
+                          - climate.152832116922715_climate
                   - type: button
                     name: All Cool
                     icon: mdi:snowflake
@@ -429,9 +430,9 @@ views:
                       service: climate.set_hvac_mode
                       target:
                         entity_id:
-                          - climate.net_ac_b64e
-                          - climate.net_ac_c400
-                          - climate.net_ac_2332
+                          - climate.153931628549890_climate
+                          - climate.153931628549884_climate
+                          - climate.152832116922715_climate
                       service_data:
                         hvac_mode: cool
                   - type: button
@@ -442,9 +443,9 @@ views:
                       service: climate.set_hvac_mode
                       target:
                         entity_id:
-                          - climate.net_ac_b64e
-                          - climate.net_ac_c400
-                          - climate.net_ac_2332
+                          - climate.153931628549890_climate
+                          - climate.153931628549884_climate
+                          - climate.152832116922715_climate
                       service_data:
                         hvac_mode: heat
                   - type: button
@@ -455,9 +456,9 @@ views:
                       service: climate.set_hvac_mode
                       target:
                         entity_id:
-                          - climate.net_ac_b64e
-                          - climate.net_ac_c400
-                          - climate.net_ac_2332
+                          - climate.153931628549890_climate
+                          - climate.153931628549884_climate
+                          - climate.152832116922715_climate
                       service_data:
                         hvac_mode: auto
           
@@ -475,9 +476,9 @@ views:
                       service: climate.set_temperature
                       target:
                         entity_id:
-                          - climate.net_ac_b64e
-                          - climate.net_ac_c400
-                          - climate.net_ac_2332
+                          - climate.153931628549890_climate
+                          - climate.153931628549884_climate
+                          - climate.152832116922715_climate
                       service_data:
                         temperature: 20
                   - type: button
@@ -487,9 +488,9 @@ views:
                       service: climate.set_temperature
                       target:
                         entity_id:
-                          - climate.net_ac_b64e
-                          - climate.net_ac_c400
-                          - climate.net_ac_2332
+                          - climate.153931628549890_climate
+                          - climate.153931628549884_climate
+                          - climate.152832116922715_climate
                       service_data:
                         temperature: 22
                   - type: button
@@ -499,9 +500,9 @@ views:
                       service: climate.set_temperature
                       target:
                         entity_id:
-                          - climate.net_ac_b64e
-                          - climate.net_ac_c400
-                          - climate.net_ac_2332
+                          - climate.153931628549890_climate
+                          - climate.153931628549884_climate
+                          - climate.152832116922715_climate
                       service_data:
                         temperature: 24
                   - type: button
@@ -511,18 +512,16 @@ views:
                       service: climate.set_temperature
                       target:
                         entity_id:
-                          - climate.net_ac_b64e
-                          - climate.net_ac_c400
-                          - climate.net_ac_2332
+                          - climate.153931628549890_climate
+                          - climate.153931628549884_climate
+                          - climate.152832116922715_climate
                       service_data:
                         temperature: 26
 
       - type: markdown
         content: |
-          **Note:** If the entity IDs differ from the expected names, update them in this dashboard configuration.
-          
-          Common entity ID patterns:
-          - `climate.net_ac_b64e` or `climate.net_ac_B64E`
-          - `climate.net_ac_c400` or `climate.net_ac_C400`
-          - `climate.net_ac_2332` or `climate.net_ac_2332`
+          **Entity IDs updated for integration v0.6.1:**
+          - `climate.153931628549890_climate` - AC Bedroom (Entry ID: 01KC6PK6RDZ7E3GW17F0CS7N1Z)
+          - `climate.153931628549884_climate` - AC Liam (Entry ID: 01KC6PKXZENJJG8D7CPKF1H8B1)
+          - `climate.152832116922715_climate` - AC Living Room (Entry ID: 01KC6PJ0C34408GW7MDY65T0VX)
 
