@@ -31,9 +31,10 @@
         {% endif %}
       unit_of_measurement: ""
 
-    # Frigate License Plate History Sensors
-    - name: "Frigate Last 5 License Plates"
-      unique_id: "frigate_last_5_license_plates"
+    # Frigate License Plate Recognition Counts
+    # This sensor aggregates license plate data from both cameras
+    - name: "Frigate License Plate Counts"
+      unique_id: "frigate_license_plate_counts"
       state: >
         {% set window_plate = states('sensor.window_last_recognized_plate') %}
         {% set eufy_plate = states('sensor.eufy_last_recognized_plate') %}
