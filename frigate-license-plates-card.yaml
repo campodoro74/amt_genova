@@ -1,0 +1,62 @@
+# Frigate License Plates Card Configuration
+# Add this card to your Frigate dashboard to show the last 5 recognized license plates
+#
+# To add this to your dashboard:
+# 1. Go to your Frigate dashboard in Home Assistant
+# 2. Click the three dots menu (⋮) → "Edit Dashboard"
+# 3. Click the "+" button to add a card
+# 4. Click the three dots on the new card → "Edit Card"
+# 5. Click the three dots again → "Raw configuration editor"
+# 6. Paste ONE of the card configurations below (OPTION 1 is recommended)
+# 7. Save
+
+# OPTION 1: Entities Card with History Graph (Recommended - Shows last 5 plates)
+- type: vertical-stack
+  cards:
+    - type: entities
+      title: "Last Recognized License Plates"
+      icon: mdi:car-multiple
+      show_header_toggle: false
+      entities:
+        - entity: sensor.window_last_recognized_plate
+          name: "Window Camera"
+          icon: mdi:camera
+        - entity: sensor.eufy_last_recognized_plate
+          name: "Eufy Camera"
+          icon: mdi:camera
+    - type: history-graph
+      title: "License Plate Detection History (Last 7 Days)"
+      hours_to_show: 168
+      refresh_interval: 60
+      entities:
+        - entity: sensor.window_last_recognized_plate
+          name: "Window"
+        - entity: sensor.eufy_last_recognized_plate
+          name: "Eufy"
+
+# OPTION 2: Simple Entities Card (Quick view of current plates)
+# - type: entities
+#   title: "Last 5 Recognized License Plates"
+#   icon: mdi:car-multiple
+#   show_header_toggle: false
+#   entities:
+#     - entity: sensor.window_last_recognized_plate
+#       name: "Window Camera - Last Plate"
+#       icon: mdi:camera
+#     - entity: sensor.eufy_last_recognized_plate
+#       name: "Eufy Camera - Last Plate"
+#       icon: mdi:camera
+
+# OPTION 3: Markdown Card (If you want a formatted list)
+# Note: This requires the markdown card to support templates
+# - type: markdown
+#   title: "Last 5 Recognized License Plates"
+#   content: |
+#     ## Recent License Plate Detections
+#     
+#     **Window Camera:** {{ states('sensor.window_last_recognized_plate') }}
+#     
+#     **Eufy Camera:** {{ states('sensor.eufy_last_recognized_plate') }}
+#     
+#     *Check the history graph below for detailed detection history*
+

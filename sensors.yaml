@@ -1,0 +1,53 @@
+# Template Sensors
+- sensor:
+    - name: "Toilet Heater Countdown"
+      unique_id: "toilet_heater_countdown"
+      state: >
+        {% set switch = states('switch.standing_lamp_socket_1') %}
+        {% set power = states('sensor.standing_lamp_power') | float(0) %}
+        {% if switch == 'on' or power > 1 %}
+          {% set last_changed = state_attr('switch.standing_lamp_socket_1', 'last_changed') %}
+          {% if last_changed %}
+            {% set elapsed = (as_timestamp(now()) - as_timestamp(last_changed)) | int %}
+            {% set remaining = 300 - elapsed %}
+            {% if remaining > 0 %}
+              {% set minutes = (remaining // 60) | int %}
+              {% set seconds = (remaining % 60) | int %}
+              {{ "%02d:%02d" | format(minutes, seconds) }}
+            {% else %}
+              00:00
+            {% endif %}
+          {% else %}
+            05:00
+          {% endif %}
+        {% else %}
+          Off
+        {% endif %}
+      icon: >
+        {% if states('switch.standing_lamp_socket_1') == 'on' or states('sensor.standing_lamp_power') | float(0) > 1 %}
+          mdi:timer
+        {% else %}
+          mdi:timer-off
+        {% endif %}
+      unit_of_measurement: ""
+
+    # Frigate License Plate History Sensors
+    - name: "Frigate Last 5 License Plates"
+      unique_id: "frigate_last_5_license_plates"
+      state: >
+        {% set window_plate = states('sensor.window_last_recognized_plate') %}
+        {% set eufy_plate = states('sensor.eufy_last_recognized_plate') %}
+        {% set plates = [] %}
+        {% if window_plate not in ['None', 'Unknown', 'unknown', '', 'unavailable'] %}
+          {% set _ = plates.append(window_plate) %}
+        {% endif %}
+        {% if eufy_plate not in ['None', 'Unknown', 'unknown', '', 'unavailable'] %}
+          {% set _ = plates.append(eufy_plate) %}
+        {% endif %}
+        {% if plates | length > 0 %}
+          {{ plates | join(', ') }}
+        {% else %}
+          No recent plates
+        {% endif %}
+      icon: mdi:car-multiple
+
