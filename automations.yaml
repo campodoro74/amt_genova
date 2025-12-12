@@ -21,22 +21,3 @@
       target:
         entity_id: switch.standing_lamp_socket_1
 
-# ============================================================
-# LICENSE PLATE COUNT UPDATER
-# Update license plate counts when plates are detected or periodically
-# ============================================================
-- alias: "Update License Plate Counts"
-  description: "Update license plate recognition counts"
-  id: "update_license_plate_counts"
-  
-  trigger:
-    - platform: state
-      entity_id:
-        - sensor.window_last_recognized_plate
-        - sensor.eufy_last_recognized_plate
-    - platform: time_pattern
-      hours: "/1"
-  
-  action:
-    - service: python_script.license_plate_counter
-
