@@ -3,7 +3,7 @@
 
 # ============================================================
 # STANDING LAMP AUTO-OFF AUTOMATION
-# Turn off standing lamp if current stays above 1A for 5 minutes
+# Turn off standing lamp switch if current stays above 1A for 5 minutes
 # ============================================================
 - alias: "Standing Lamp Auto-Off on High Current"
   description: "Turn off standing lamp switch if current stays above 1A for 5 minutes"
@@ -20,4 +20,23 @@
     - service: switch.turn_off
       target:
         entity_id: switch.standing_lamp_socket_1
+
+# ============================================================
+# LICENSE PLATE COUNT UPDATER
+# Update license plate counts when plates are detected or periodically
+# ============================================================
+- alias: "Update License Plate Counts"
+  description: "Update license plate recognition counts"
+  id: "update_license_plate_counts"
+  
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.window_last_recognized_plate
+        - sensor.eufy_last_recognized_plate
+    - platform: time_pattern
+      hours: "/1"
+  
+  action:
+    - service: python_script.license_plate_counter
 
