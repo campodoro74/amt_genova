@@ -3,9 +3,4 @@
 # Enable Tado schedule helpers
 input_boolean: !include tado_helpers.yaml
 
-# AMT Genova integration
-amt_genova:
-    - "0731"
-    - "0732"
-
 # ...existing code...

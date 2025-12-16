@@ -28,7 +28,8 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
         update_interval=timedelta(seconds=DEFAULT_SCAN_INTERVAL),
     )
 
-    await coordinator.async_config_entry_first_refresh()
+    # For YAML setup, use async_refresh instead of async_config_entry_first_refresh
+    await coordinator.async_refresh()
 
     async_add_entities(
         AMTStopSensor(coordinator, stop)
