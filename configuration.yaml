@@ -1,6 +1,0 @@
-# Home Assistant main configuration
-
-# Enable Tado schedule helpers
-input_boolean: !include tado_helpers.yaml
-
-# ...existing code...
