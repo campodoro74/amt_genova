@@ -1,0 +1,9 @@
+{
+  "domain": "amt_genova",
+  "name": "AMT Genova",
+  "version": "1.0.0",
+  "documentation": "https://github.com/campodoro74/amt_genova",
+  "requirements": [],
+  "codeowners": ["@campodoro74"],
+  "iot_class": "cloud_polling"
+}
