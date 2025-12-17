@@ -1,0 +1,222 @@
+views:
+  - title: AMT Genova Bus Times
+    path: amt-genova
+    icon: mdi:bus
+    panel: true
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: |
+              # 🚌 AMT Genova Bus Times
+              {% set header_data = state_attr('sensor.amt_0731', 'next') or [] %}
+              {% set found_513 = false %}
+              {% set next_513_wait = none %}
+              {% set next_513_emoji = '' %}
+              {% for bus in header_data %}
+                {% if not found_513 and (bus.route|string == '513' or bus.route|string == '513/' or '513' in bus.route|string) and bus.source == 'realtime' %}
+                  {% set next_513_wait = bus.wait %}
+                  {% if bus.wait <= 1 %}
+                    {% set next_513_emoji = '🔴' %}
+                  {% elif bus.wait <= 3 %}
+                    {% set next_513_emoji = '🟡' %}
+                  {% elif bus.crowded %}
+                    {% set next_513_emoji = '🟠' %}
+                  {% else %}
+                    {% set next_513_emoji = '🟢' %}
+                  {% endif %}
+                  {% set found_513 = true %}
+                {% endif %}
+              {% endfor %}
+              {% if not found_513 %}
+                {% for bus in header_data %}
+                  {% if not found_513 and (bus.route|string == '513' or bus.route|string == '513/' or '513' in bus.route|string) %}
+                    {% set next_513_wait = bus.wait %}
+                    {% if bus.wait <= 1 %}
+                      {% set next_513_emoji = '🔴' %}
+                    {% elif bus.wait <= 3 %}
+                      {% set next_513_emoji = '🟡' %}
+                    {% elif bus.crowded %}
+                      {% set next_513_emoji = '🟠' %}
+                    {% else %}
+                      {% set next_513_emoji = '🟢' %}
+                    {% endif %}
+                    {% set found_513 = true %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              {% if next_513_wait is not none %}
+                **Next 513 in {{ next_513_wait }} minutes {{ next_513_emoji }}**
+              {% endif %}
+              *Last updated: {{ state_attr('sensor.amt_0731', 'updated') }}*
+          # Stop 0731
+          - type: markdown
+            content: |
+              ## 🚏 Stop Prasca / Chiesa
+              **Next Bus:** {{ states('sensor.amt_0731') }} min
+              
+              {% set data = state_attr('sensor.amt_0731', 'next') or [] %}
+              
+              ### 🚌 Line 513
+              <table style="width: 100%; border-collapse: collapse; margin-top: 8px; table-layout: auto;">
+              <thead>
+              <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
+              <th style="text-align: left; padding: 10px; font-weight: 600; min-width: 80px;">Time</th>
+              <th style="text-align: left; padding: 10px; font-weight: 600; min-width: 70px;">Wait</th>
+              <th style="text-align: left; padding: 10px; font-weight: 600; min-width: 120px;">Destination</th>
+              <th style="text-align: left; padding: 10px; font-weight: 600; min-width: 220px;">Position</th>
+              <th style="text-align: left; padding: 10px; font-weight: 600; min-width: 100px;">Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for bus in data %}
+                {% if (bus.route|string == '513' or bus.route|string == '513/' or '513' in bus.route|string) and bus.source == 'realtime' %}
+              <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 10px; font-family: monospace;">{{ bus.time or '-' }}</td>
+              <td style="padding: 10px; font-weight: 600; color: #2196F3;">{{ bus.wait or '-' }} min</td>
+              <td style="padding: 10px;">{{ bus.headsign or '-' }}</td>
+              <td style="padding: 10px; font-size: 0.9em; line-height: 1.6; min-width: 200px;">
+                {% if bus.position and bus.position.found %}
+                  {% if bus.position.at_departure is defined and bus.position.at_departure %}
+                    🚏 Has not left yet{% if bus.position.scheduled_time %} • Scheduled: {{ bus.position.scheduled_time }}{% endif %} • Vehicle: {{ bus.vehicle or 'Unknown' }}
+                  {% elif bus.position.stops_away == 0 %}
+                    📍 At your stop{% if bus.position.target_stop_name %} ({{ bus.position.target_stop_name }}){% else %} ({{ bus.stop }}){% endif %} • Vehicle: {{ bus.vehicle or 'Unknown' }}
+                  {% else %}
+                    📍 At stop{% if bus.position.current_stop_name %} {{ bus.position.current_stop_name }}{% else %} {{ bus.position.current_stop }}{% endif %} • {{ bus.position.stops_away }} stop{% if bus.position.stops_away > 1 %}s{% endif %} away from{% if bus.position.target_stop_name %} {{ bus.position.target_stop_name }}{% else %} {{ bus.stop }}{% endif %} • Vehicle: {{ bus.vehicle or 'Unknown' }}
+                  {% endif %}
+                {% elif bus.vehicle %}
+                  Vehicle: {{ bus.vehicle }} • Position tracking unavailable
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td style="padding: 10px;">
+                {% if bus.wait <= 1 %}
+                  🔴 Too late
+                {% elif bus.wait <= 3 %}
+                  🟡 Leave now
+                {% elif bus.crowded %}
+                  🟠 Crowded
+                {% else %}
+                  🟢 On schedule
+                {% endif %}
+              </td>
+              </tr>
+                {% endif %}
+              {% endfor %}
+              {% for bus in data %}
+                {% if (bus.route|string == '513' or bus.route|string == '513/' or '513' in bus.route|string) and bus.source == 'scheduled' %}
+                  {% set has_realtime_match = false %}
+                  {% for rt_bus in data %}
+                    {% if rt_bus.source == 'realtime' and (rt_bus.route|string == '513' or rt_bus.route|string == '513/' or '513' in rt_bus.route|string) and rt_bus.headsign == bus.headsign %}
+                      {% if rt_bus.wait >= bus.wait - 2 and rt_bus.wait <= bus.wait + 2 %}
+                        {% set has_realtime_match = true %}
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                  {% if not has_realtime_match %}
+              <tr style="border-bottom: 1px solid #eee; background: #fafafa;">
+              <td style="padding: 10px; font-family: monospace; color: #999;">{{ bus.time or '-' }}</td>
+              <td style="padding: 10px; font-weight: 600; color: #999;">{{ bus.wait or '-' }} min</td>
+              <td style="padding: 10px; color: #999;">{{ bus.headsign or '-' }}</td>
+              <td style="padding: 10px; font-size: 0.95em; color: #999;">
+                <em>Scheduled</em>
+              </td>
+              <td style="padding: 10px; color: #999;">
+                🕐 Scheduled
+              </td>
+              </tr>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              </tbody>
+              </table>
+          # Stop 0732
+          - type: markdown
+            content: |
+              ## 🚏 Stop Carrara 1 / Prasca
+              {% set data_0732 = state_attr('sensor.amt_0732', 'next') or [] %}
+              {% set first_512 = none %}
+              {% for bus in data_0732 %}
+                {% if (bus.route|string == '512' or bus.route|string == '512/' or '512' in bus.route|string) and bus.source == 'realtime' and first_512 is none %}
+                  {% set first_512 = bus.wait %}
+                {% endif %}
+              {% endfor %}
+              **Next Bus:** {% if first_512 is not none %}{{ first_512 }}{% else %}{{ states('sensor.amt_0732') }}{% endif %} min
+              
+              {% set data = data_0732 %}
+              
+              ### 🚌 Line 512
+              <table style="width: 100%; border-collapse: collapse; margin-top: 8px; table-layout: auto;">
+              <thead>
+              <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
+              <th style="text-align: left; padding: 10px; font-weight: 600; min-width: 80px;">Time</th>
+              <th style="text-align: left; padding: 10px; font-weight: 600; min-width: 70px;">Wait</th>
+              <th style="text-align: left; padding: 10px; font-weight: 600; min-width: 120px;">Destination</th>
+              <th style="text-align: left; padding: 10px; font-weight: 600; min-width: 220px;">Position</th>
+              <th style="text-align: left; padding: 10px; font-weight: 600; min-width: 100px;">Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for bus in data %}
+                {% if (bus.route|string == '512' or bus.route|string == '512/' or '512' in bus.route|string) and bus.source == 'realtime' %}
+              <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 10px; font-family: monospace;">{{ bus.time or '-' }}</td>
+              <td style="padding: 10px; font-weight: 600; color: #2196F3;">{{ bus.wait or '-' }} min</td>
+              <td style="padding: 10px;">{{ bus.headsign or '-' }}</td>
+              <td style="padding: 10px; font-size: 0.9em; line-height: 1.6; min-width: 200px;">
+                {% if bus.position and bus.position.found %}
+                  {% if bus.position.at_departure is defined and bus.position.at_departure %}
+                    🚏 Has not left yet{% if bus.position.scheduled_time %} • Scheduled: {{ bus.position.scheduled_time }}{% endif %} • Vehicle: {{ bus.vehicle or 'Unknown' }}
+                  {% elif bus.position.stops_away == 0 %}
+                    📍 At your stop{% if bus.position.target_stop_name %} ({{ bus.position.target_stop_name }}){% else %} ({{ bus.stop }}){% endif %} • Vehicle: {{ bus.vehicle or 'Unknown' }}
+                  {% else %}
+                    📍 At stop{% if bus.position.current_stop_name %} {{ bus.position.current_stop_name }}{% else %} {{ bus.position.current_stop }}{% endif %} • {{ bus.position.stops_away }} stop{% if bus.position.stops_away > 1 %}s{% endif %} away from{% if bus.position.target_stop_name %} {{ bus.position.target_stop_name }}{% else %} {{ bus.stop }}{% endif %} • Vehicle: {{ bus.vehicle or 'Unknown' }}
+                  {% endif %}
+                {% elif bus.vehicle %}
+                  Vehicle: {{ bus.vehicle }} • Position tracking unavailable
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td style="padding: 10px;">
+                {% if bus.wait <= 1 %}
+                  🔴 Too late
+                {% elif bus.wait <= 3 %}
+                  🟡 Leave now
+                {% elif bus.crowded %}
+                  🟠 Crowded
+                {% else %}
+                  🟢 On schedule
+                {% endif %}
+              </td>
+              </tr>
+                {% endif %}
+              {% endfor %}
+              {% for bus in data %}
+                {% if (bus.route|string == '512' or bus.route|string == '512/' or '512' in bus.route|string) and bus.source == 'scheduled' %}
+                  {% set has_realtime_match = false %}
+                  {% for rt_bus in data %}
+                    {% if rt_bus.source == 'realtime' and (rt_bus.route|string == '512' or rt_bus.route|string == '512/' or '512' in rt_bus.route|string) and rt_bus.headsign == bus.headsign %}
+                      {% if rt_bus.wait >= bus.wait - 2 and rt_bus.wait <= bus.wait + 2 %}
+                        {% set has_realtime_match = true %}
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                  {% if not has_realtime_match %}
+              <tr style="border-bottom: 1px solid #eee; background: #fafafa;">
+              <td style="padding: 10px; font-family: monospace; color: #999;">{{ bus.time or '-' }}</td>
+              <td style="padding: 10px; font-weight: 600; color: #999;">{{ bus.wait or '-' }} min</td>
+              <td style="padding: 10px; color: #999;">{{ bus.headsign or '-' }}</td>
+              <td style="padding: 10px; font-size: 0.95em; color: #999;">
+                <em>Scheduled</em>
+              </td>
+              <td style="padding: 10px; color: #999;">
+                🕐 Scheduled
+              </td>
+              </tr>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              </tbody>
+              </table>
