@@ -32,12 +32,14 @@ def calculate_vehicle_position(target_stop, tracking_stops, all_stop_data, route
     # Get departure stop for this route
     departure_stop = None
     route_stops = None
+    target_index = None  # Initialize outside conditional to avoid NameError
     if routes_config and route in routes_config:
         route_stops = routes_config[route].get("stops", [])
         departure_stop = routes_config[route].get("departure")
-        target_index = None
         if target_stop in route_stops:
             target_index = route_stops.index(target_stop)
+    
+    target_stop_name = STOP_NAMES.get(target_stop, target_stop)
     
     # Check tracking stops in reverse order (closest to target first)
     # Only consider a bus "at" a stop if its wait time at that stop is reasonable (< 5 minutes)
@@ -57,7 +59,7 @@ def calculate_vehicle_position(target_stop, tracking_stops, all_stop_data, route
                 if departure_stop and stop_id == departure_stop:
                     scheduled_time = bus_at_stop.get("time", "")
                     stop_name = STOP_NAMES.get(stop_id, stop_id)
-                    return {"stops_away": None, "current_stop": stop_id, "current_stop_name": stop_name, "found": True, "at_departure": True, "scheduled_time": scheduled_time}
+                    return {"stops_away": None, "current_stop": stop_id, "current_stop_name": stop_name, "target_stop_name": target_stop_name, "found": True, "at_departure": True, "scheduled_time": scheduled_time}
                 
                 # Calculate stops_away using route if available, otherwise use index
                 if route_stops and target_index is not None and stop_id in route_stops:
@@ -69,7 +71,7 @@ def calculate_vehicle_position(target_stop, tracking_stops, all_stop_data, route
                 else:
                     stops_away = i + 1
                 stop_name = STOP_NAMES.get(stop_id, stop_id)
-                return {"stops_away": stops_away, "current_stop": stop_id, "current_stop_name": stop_name, "found": True, "at_departure": False}
+                return {"stops_away": stops_away, "current_stop": stop_id, "current_stop_name": stop_name, "target_stop_name": target_stop_name, "found": True, "at_departure": False}
     
     # Before checking if bus is at target stop, explicitly check departure stop
     # This prevents marking a bus as "at your stop" when it's actually still at departure
@@ -79,7 +81,12 @@ def calculate_vehicle_position(target_stop, tracking_stops, all_stop_data, route
             if (bus.get("vehicle") == vehicle and 
                 (bus.get("route") == route or bus.get("route") == f"{route}/") and
                 bus.get("headsign") == headsign):
-                return {"stops_away": None, "current_stop": departure_stop, "found": True, "at_departure": True}
+                # Only consider at departure if wait time is reasonable
+                bus_wait_at_departure = bus.get("wait", 999)
+                if bus_wait_at_departure <= 10:  # Allow longer wait at departure
+                    scheduled_time = bus.get("time", "")
+                    stop_name = STOP_NAMES.get(departure_stop, departure_stop)
+                    return {"stops_away": None, "current_stop": departure_stop, "current_stop_name": stop_name, "target_stop_name": target_stop_name, "found": True, "at_departure": True, "scheduled_time": scheduled_time}
     
     # If not found at tracking stops or departure, check if bus is actually at target stop
     # Only consider it "at your stop" if wait time is very short (≤ 1 minute) AND not at departure
@@ -90,10 +97,10 @@ def calculate_vehicle_position(target_stop, tracking_stops, all_stop_data, route
                 (bus.get("route") == route or bus.get("route") == f"{route}/") and
                 bus.get("headsign") == headsign):
                 stop_name = STOP_NAMES.get(target_stop, target_stop)
-                return {"stops_away": 0, "current_stop": target_stop, "current_stop_name": stop_name, "found": True, "at_departure": False}
+                return {"stops_away": 0, "current_stop": target_stop, "current_stop_name": stop_name, "target_stop_name": target_stop_name, "found": True, "at_departure": False}
     
     # Bus not found at tracking stops, departure, or target stop (or too far away)
-    return {"stops_away": None, "current_stop": None, "found": False, "at_departure": False}
+    return {"stops_away": None, "current_stop": None, "current_stop_name": None, "target_stop_name": target_stop_name, "found": False, "at_departure": False}
 
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):

@@ -46,15 +46,15 @@ cards:
   # Stop 0731
   - type: markdown
     content: |
-  ## 🚏 Stop Prasca / Chiesa
-  {% set data_0731 = state_attr('sensor.amt_0731', 'next') or [] %}
-  {% set first_513 = none %}
-  {% for bus in data_0731 %}
-    {% if (bus.route|string == '513' or bus.route|string == '513/' or '513' in bus.route|string) and bus.source == 'realtime' and first_513 is none %}
-      {% set first_513 = bus.wait %}
-    {% endif %}
-  {% endfor %}
-  **Next Bus:** {% if first_513 is not none %}{{ first_513 }}{% else %}{{ states('sensor.amt_0731') }}{% endif %} min
+      ## 🚏 Stop Prasca / Chiesa
+      {% set data_0731 = state_attr('sensor.amt_0731', 'next') or [] %}
+      {% set first_513 = none %}
+      {% for bus in data_0731 %}
+        {% if (bus.route|string == '513' or bus.route|string == '513/' or '513' in bus.route|string) and bus.source == 'realtime' and first_513 is none %}
+          {% set first_513 = bus.wait %}
+        {% endif %}
+      {% endfor %}
+      **Next Bus:** {% if first_513 is not none %}{{ first_513 }}{% else %}{{ states('sensor.amt_0731') }}{% endif %} min
       
       {% set data = data_0731 %}
       
@@ -135,17 +135,17 @@ cards:
   # Stop 0732
   - type: markdown
     content: |
-  ## 🚏 Stop Carrara 1 / Prasca
-  {% set data_0732 = state_attr('sensor.amt_0732', 'next') or [] %}
-  {% set first_512 = none %}
-  {% for bus in data_0732 %}
-    {% if (bus.route|string == '512' or bus.route|string == '512/' or '512' in bus.route|string) and bus.source == 'realtime' and first_512 is none %}
-      {% set first_512 = bus.wait %}
-    {% endif %}
-  {% endfor %}
-  **Next Bus:** {% if first_512 is not none %}{{ first_512 }}{% else %}{{ states('sensor.amt_0732') }}{% endif %} min
-  
-  {% set data = data_0732 %}
+      ## 🚏 Stop Carrara 1 / Prasca
+      {% set data_0732 = state_attr('sensor.amt_0732', 'next') or [] %}
+      {% set first_512 = none %}
+      {% for bus in data_0732 %}
+        {% if (bus.route|string == '512' or bus.route|string == '512/' or '512' in bus.route|string) and bus.source == 'realtime' and first_512 is none %}
+          {% set first_512 = bus.wait %}
+        {% endif %}
+      {% endfor %}
+      **Next Bus:** {% if first_512 is not none %}{{ first_512 }}{% else %}{{ states('sensor.amt_0732') }}{% endif %} min
+      
+      {% set data = data_0732 %}
       
       ### 🚌 Line 512
       <table style="width: 100%; border-collapse: collapse; margin-top: 8px; table-layout: auto;">

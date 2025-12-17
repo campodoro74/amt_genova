@@ -1,7 +1,7 @@
 from datetime import timedelta
 
-from homeassistant.components.sensor import SensorEntity
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.components.sensor import SensorEntity  # type: ignore[import-untyped]
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator  # type: ignore[import-untyped]
 
 from .const import DOMAIN, DEFAULT_SCAN_INTERVAL
 from .amt_api import fetch_stop
