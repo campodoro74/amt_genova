@@ -96,7 +96,7 @@ amt_genova:
 For each configured stop, a sensor entity is created:
 
 - **Entity ID**: `sensor.amt_{STOP_ID}` (e.g., `sensor.amt_0731`)
-- **State**: Minutes until next bus arrival (for the primary line at that stop)
+- **State**: Minutes until **next bus** arrival (for the primary line at that stop)
 - **Attributes**:
   - `stop`: The stop ID
   - `updated`: Last update timestamp (format: "YYYY-MM-DD HH:MM:SS")
@@ -165,10 +165,10 @@ type: entities
 title: AMT Genova Bus Times
 entities:
   - entity: sensor.amt_0731
-    name: Stop Prasca / Chiesa
+    name: Stop **Prasca / Chiesa**
     icon: mdi:bus-clock
   - entity: sensor.amt_0732
-    name: Stop Carrara 1 / Prasca
+    name: Stop **Carrara 1 / Prasca**
     icon: mdi:bus-clock
 ```
 
@@ -179,7 +179,7 @@ For detailed information including vehicle positions, use a markdown card with J
 ```yaml
 type: markdown
 content: |
-  ## 🚏 Stop Prasca / Chiesa
+  ## 🚏 Stop **Prasca / Chiesa**
   {% set data = state_attr('sensor.amt_0731', 'next') or [] %}
   {% for bus in data %}
     {% if bus.source == 'realtime' %}
@@ -199,11 +199,11 @@ content: |
 
 The integration includes a built-in mapping of stop IDs to human-readable names. Common stops include:
 
-- `0731`: Prasca / Chiesa
-- `0732`: Carrara 1 / Prasca
-- `0730`: Prasca / Rosata
-- `2386`: Via Bobbio / Ponte (Line 512 departure)
-- `2395`: Staglieno (Line 513 departure)
+- `0731`: **Prasca / Chiesa**
+- `0732`: **Carrara 1 / Prasca**
+- `0730`: **Prasca / Rosata**
+- `2386`: **Via Bobbio / Ponte** (Line 512 departure)
+- `2395`: **Staglieno** (Line 513 departure)
 
 See `const.py` for the complete list of mapped stop names. If a stop ID is not in the mapping, the ID itself will be displayed.
 
